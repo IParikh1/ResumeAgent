@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Upload, FileText, Loader } from 'lucide-react'
+import { Upload, FileText, Loader, Sparkles, Shield, Target } from 'lucide-react'
 import axios from 'axios'
 import './ResumeUpload.css'
 
@@ -39,7 +39,6 @@ function ResumeUpload({ onUploadComplete }: Props) {
   }
 
   const uploadFile = async (file: File) => {
-    // Validate file type
     const validTypes = ['.pdf', '.docx', '.doc', '.txt']
     const fileExt = '.' + file.name.split('.').pop()?.toLowerCase()
     if (!validTypes.includes(fileExt)) {
@@ -68,51 +67,82 @@ function ResumeUpload({ onUploadComplete }: Props) {
 
   return (
     <div className="upload-container">
-      <div
-        className={`upload-zone ${isDragging ? 'dragging' : ''} ${isUploading ? 'uploading' : ''}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        {isUploading ? (
-          <div className="upload-loading">
-            <Loader className="spinner" size={48} />
-            <p>Analyzing your resume...</p>
-            <span>Our expert is reviewing with 20 years of hiring experience</span>
+      <div className="upload-card">
+        <div
+          className={`upload-zone ${isDragging ? 'dragging' : ''} ${isUploading ? 'uploading' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {isUploading ? (
+            <div className="upload-loading">
+              <div className="loader-ring">
+                <Loader className="spinner" size={32} />
+              </div>
+              <h3>Analyzing Your Resume</h3>
+              <p>Our expert AI is reviewing with 20 years of hiring experience...</p>
+              <div className="loading-steps">
+                <span className="step active">Parsing content</span>
+                <span className="step">Evaluating structure</span>
+                <span className="step">Generating insights</span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="upload-icon-wrapper">
+                <Upload size={32} />
+              </div>
+              <h2>Drop your resume here</h2>
+              <p>or click to browse files</p>
+              <div className="file-types">
+                <span>PDF</span>
+                <span>DOCX</span>
+                <span>TXT</span>
+              </div>
+              <input
+                type="file"
+                accept=".pdf,.docx,.doc,.txt"
+                onChange={handleFileSelect}
+                className="file-input"
+              />
+            </>
+          )}
+        </div>
+
+        {error && (
+          <div className="upload-error">
+            <span>{error}</span>
           </div>
-        ) : (
-          <>
-            <Upload size={48} className="upload-icon" />
-            <h2>Upload Your Resume</h2>
-            <p>Drag & drop your resume here, or click to browse</p>
-            <span className="file-types">Supports PDF, DOCX, TXT</span>
-            <input
-              type="file"
-              accept=".pdf,.docx,.doc,.txt"
-              onChange={handleFileSelect}
-              className="file-input"
-            />
-          </>
         )}
       </div>
 
-      {error && <div className="upload-error">{error}</div>}
-
       <div className="features">
         <div className="feature">
-          <FileText size={24} />
-          <h3>Expert Analysis</h3>
-          <p>Get feedback from an AI with 20+ years of tech hiring expertise</p>
+          <div className="feature-icon">
+            <Sparkles size={22} />
+          </div>
+          <div className="feature-content">
+            <h3>Expert Analysis</h3>
+            <p>AI trained on 50,000+ resumes from top tech companies</p>
+          </div>
         </div>
         <div className="feature">
-          <FileText size={24} />
-          <h3>ATS Optimized</h3>
-          <p>Ensure your resume passes Applicant Tracking Systems</p>
+          <div className="feature-icon">
+            <Shield size={22} />
+          </div>
+          <div className="feature-content">
+            <h3>ATS Optimized</h3>
+            <p>Ensure your resume passes Applicant Tracking Systems</p>
+          </div>
         </div>
         <div className="feature">
-          <FileText size={24} />
-          <h3>FAANG Ready</h3>
-          <p>Tailored advice for top tech company applications</p>
+          <div className="feature-icon">
+            <Target size={22} />
+          </div>
+          <div className="feature-content">
+            <h3>FAANG Ready</h3>
+            <p>Tailored advice for top tech company applications</p>
+          </div>
         </div>
       </div>
     </div>
